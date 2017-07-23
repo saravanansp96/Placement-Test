@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="Placement">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Placement Quiz</title>
+</head>
+<body class="back">
+<div class="container">
+  <div ng-controller="quiz as q" class="center1" >
+      <div class="row" ng-hide="q.quizActive">
+        <div class="col-sm-12">
+          <form class="form-inline well well-sm clearfix">
+              <input
+                  type="text"
+                  placeholder="Roll Number"
+                  class="form-control pull-left"
+                  ng-model="q.search"><span id="error" class="text-danger errorcss pull-left"></span>
+                  <button class="btn btn-warning button pull-right" ng-click="q.activateQuiz()"><strong>Start Test</strong></button><br>
+
+        </div>
+        <div class="col-sm-12">
+          <div class="well well-sm">
+            <div class="instructionCSS">
+              <h1 class="centere">Aptitude and Programming</h1>
+              <h3>Department of CSE</h3><br>
+              <h3>INSTRUCTIONS</h3><br>
+              <h4>
+              Total number of questions: 40<br><br>
+              Number of MCQ - 40<br></h4><br>
+              <h4>Time alloted : 40 mins</h4><br>
+              <h4>ATTEND ALL QUESTIONS<br>
+                  NO NEGATIVE MARKS</h4><br>
+              <h4 class="text-danger">DONOT REFRESH THE PAGE!</h4><br>
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="row"  ng-hide="q.quizActive1">
+    <div class="col-sm-12">
+      <div class="well well-sm">
+        <div class="instructionCSS">
+          <div class="right"><h4>Test closes in <span id="demo"></span> minutes!</h4></div>
+          <h3 class="left">Progress:</h3><br>
+          <div class="btn-toolbar col-xs-12">
+            <button class="btn"
+                ng-repeat="question in q.Quiz"
+                ng-class="{'btn-info': question.selected !== null, 'btn-danger': question.selected === null}"
+                ng-click=" q.setActiveQuestion($index)">
+                {{$index+1}}
+                 </button>
+               </div>
+               <br><br><br><br>
+               <div class="left">
+          <h3>Question:</h3>
+          <h4>{{q.activeQues+1+" . "+ q.Quiz[q.activeQues].text}}</h4>
+          <div class="row" ng-if="q.Quiz[q.activeQues].type==='text'">
+            <div class="col-sm-6" ng-repeat="ans in q.Quiz[q.activeQues].possibilities">
+                  <h4 class="answer" ng-class="{'bg-info':$index===q.Quiz[q.activeQues].selected}" ng-click="q.selectAnswer($index)">{{ans.answer}}</h4>
+            </div>
+          </div>
+          <div class="row" ng-if="q.Quiz[q.activeQues].type==='image'">
+            <div class="col-sm-6" ng-repeat="ans in q.Quiz[q.activeQues].possibilities">
+                  <image ng-src="{{ans.answer}}" class="ansimg" ng-class="{'answerimg':$index===q.Quiz[q.activeQues].selected}" ng-click="q.selectAnswer($index)">
+            </div>
+          </div>
+          <br>
+          <button class="btn btn-warning" ng-click="q.prev()">prev</button>
+          <button class="btn btn-warning right" ng-click="q.next()">next</button>
+        </div>
+    </div>
+  </div>
+  <button class="btn btn-success btn_margin" ng-click="q.Result1()">Submit</button>
+  <div class="row"  ng-hide="q.quizActive2">
+    <div class="col-sm-8 col-md-offset-2">
+      <div class="well well-sm">
+        <h4>Do you want to submit?</h4>
+        <button class="btn btn-success space" ng-click="q.Result()">Yes</button>
+        <button class="btn btn-danger space" ng-click="q.quizActive2=true">No</button>
+  </div>
+  </div>
+  </div>
+</div>
+</div>
+<div ng-hide="q.quizActive3">
+<div class="row">
+  <div class="col-sm-12">
+    <div class="well well-sm">
+      <div class="instructionCSS">
+      <h3 class="left">Results:</h3><br>
+      <div class="btn-toolbar col-xs-12">
+        <button class="btn"
+            ng-repeat="question in q.Quiz"
+            ng-class="{'btn btn-success': question.correct===true , 'btn btn-danger': question.correct===false}"
+            ng-click=" q.setActiveQuestion($index)">
+            <span ng-class="{'glyphicon glyphicon-ok' : question.correct===true , 'glyphicon glyphicon-remove': question.correct===false }">
+             </button>
+           </div><br>
+           <h3 class="pull-left">Score: {{q.noc}}/{{q.Quiz.length}}</h3><br><br><br><br><br>
+      <div class="left">
+      <div><h3>Question:</h3></div>
+      <div><h4>{{q.activeQues+1+" . "+ q.Quiz[q.activeQues].text}}</h4></div>
+      <div class="row" ng-if="q.Quiz[q.activeQues].type==='text'">
+        <div class="col-sm-6" ng-repeat="ans in q.Quiz[q.activeQues].possibilities">
+              <h4 class="answer" ng-class="q.getAnsClass($index)">{{ans.answer}}<p class="pull-right" ng-show="$index!==q.correctAnswers[q.activeQues] && $index === q.Quiz[q.activeQues].selected">your answer{{q.flag}}</p>
+              <p class="pull-right" ng-show="$index === q.correctAnswers[q.activeQues]">correct answer{{q.flag}}</p></h4>
+            </div>
+          </div>
+        <br>
+        <button class="btn btn-warning" ng-click="q.prev()">prev</button>
+        <button class="btn btn-warning right" ng-click="q.next()">next</button>
+    </div>
+</div>
+</div>
+</div>
+</div>
+<div class="row">
+<button class="btn btn-primary center2" ng-click="q.Start()">Quit</button>
+</div>
+</div>
+</div>
+</div>
+</body>
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<link rel="stylesheet" href="css/styles.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.4/angular.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<script src="js/app.js"> </script>
+
+<script src="js/controller/PlaceQuizCtrl.js"> </script>
+
+</html>
